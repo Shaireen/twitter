@@ -55,7 +55,7 @@ def _(image_name):
 @get("/")
 @view("index")
 def _():
-  return dict(tabs=tabs, tweets=tweets)
+  return dict(tabs=tabs, tweets=tweets, trends=trends)
 
 
 

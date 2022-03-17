@@ -101,8 +101,14 @@
     % # right
     <div class="w-1/4 h-screen">
       <div class="w-1/5 fixed flex flex-col h-screen gap-4 py-4 pl-4">
-        <div class="h-1/2 flex-grow bg-gray-300 rounded">
-          1
+        <div class="h-1/2 flex-grow bg-gray-300 rounded overflow-hidden">
+          % for trend in trends:
+            <div class="px-2 py-1 hover:bg-gray-400 cursor-pointer">
+              <p class="font-thin">{{trend["category"]}}</p>
+              <p class="font-bold">{{trend["title"]}}</p>
+              <p class="font-thin">{{trend["tweets_counter"]}} tweets</p>
+            </div>
+          % end
         </div>
         <div class="h-1/2 bg-gray-300 rounded">
           2
