@@ -103,15 +103,36 @@
       <div class="w-1/5 fixed flex flex-col h-screen gap-4 py-4 pl-4">
         <div class="h-1/2 flex-grow bg-gray-300 rounded overflow-hidden">
           % for trend in trends:
-            <div class="px-2 py-1 hover:bg-gray-400 cursor-pointer">
-              <p class="font-thin">{{trend["category"]}}</p>
-              <p class="font-bold">{{trend["title"]}}</p>
-              <p class="font-thin">{{trend["tweets_counter"]}} tweets</p>
+            <div class="flex justify-between px-2 py-1 hover:bg-gray-400 cursor-pointer">
+              <div>
+                <p class="font-thin">{{trend["category"]}}</p>
+                <p class="font-bold">{{trend["title"]}}</p>
+                <p class="font-thin">{{trend["tweets_counter"]}} tweets</p>
+              </div>
+              <div>...</div>
             </div>
           % end
         </div>
-        <div class="h-1/2 bg-gray-300 rounded">
-          2
+
+        <div class="h-1/2 bg-gray-100 rounded">
+          <div class="px-2 pt-4 font-bold text-xl">
+            You might like
+          </div>
+          % for item in items:
+          <div class="flex items-center gap-2 px-2 py-3 hover:bg-gray-200 cursor-pointer">
+            <img class="w-12 h-12 rounded-full flex-none" src="/images/{{item['img']}}">
+            <div class="flex-1 overflow-ellipsis">
+              <p>{{item["title"]}}</p>
+              <p class="font-thin">@{{item["user_name"]}}</p>
+            </div>
+            <button class="py-2 px-4 bg-white rounded-full">
+              Follow
+            </button>
+          </div>
+          % end
+          <a href="" class="self-end px-2 text-blue1 font-thin">
+            Show more
+          </a>
         </div>
       </div>
     </div>

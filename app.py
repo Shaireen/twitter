@@ -41,6 +41,14 @@ tweets = [
   {"src":"3.jpg", "user_first_name":"Joe Biden", "user_last_name":"Biden", "user_name":"elonmusk", "date":"Mar 7", "text":"Last year has been the best year for manufacturing jobs and trucking jobs since 1994."},
 ]
 
+items = [
+  {"img":"bbc.png", "title":"BBC News", "user_name":"bbcworld"},
+  {"img":"biden.jpg", "title":"Joe Biden", "user_name":"joebiden"},
+  {"img":"harris.jpg", "title":"Vice President", "user_name":"vp"},
+]
+
+
+
 ##############################
 @get("/app.css")
 def _():
@@ -55,7 +63,7 @@ def _(image_name):
 @get("/")
 @view("index")
 def _():
-  return dict(tabs=tabs, tweets=tweets, trends=trends)
+  return dict(tabs=tabs, tweets=tweets, trends=trends, items=items)
 
 
 
