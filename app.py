@@ -19,9 +19,11 @@ people = [
 ]
 
 trends = [
-  {"top": "Music", "title": "We Won", "bottom": "135K Tweets"},
-  {"top": "Pop", "title": "Blue Ivy", "bottom": "40k tweets"},
-  {"top": "Trending in US", "title": "Denim Day", "bottom": "40k tweets"},
+  {"cetegory": "Music", "title": "We Won", "tweets_counter": "135K"},
+  {"cetegory": "Pop", "title": "Blue Ivy", "tweets_counter": "40k"},
+  {"cetegory": "Trending in US", "title": "Denim Day", "tweets_counter": "40k"},
+  {"cetegory": "Ukraine", "title": "Ukraine", "tweets_counter": "20k"},
+  {"cetegory": "Russia", "title": "Russia", "tweets_counter": "10k"},
 ]
 
 tweets = [
