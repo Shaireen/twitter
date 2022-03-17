@@ -55,6 +55,11 @@ def _():
   return static_file("app.css", root=".")
 
 ##############################
+@get("/app.js")
+def _():
+  return static_file("app.js", root=".")
+
+##############################
 @get("/images/<image_name>")
 def _(image_name):
   return static_file(image_name, root="./images")
