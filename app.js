@@ -21,7 +21,7 @@ async function sendTweet(){
 
   button.disabled = false
   button.innerText = button.dataset.default
-  _one("input", form).value = ""  
+
 
   if( ! connection.ok ){
     return
@@ -51,6 +51,7 @@ async function sendTweet(){
     </div>
   </div> 
   `
+  _one("input", form).value = ""  
 
   _one("#tweets").insertAdjacentHTML("afterbegin", tweet)
 
