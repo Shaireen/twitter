@@ -22,13 +22,13 @@ async function sendTweet(){
   button.disabled = false
   button.innerText = button.dataset.default
 
-
   if( ! connection.ok ){
     return
   }
+  const tweet_id = await connection.text() # tweet id will be here
   // Success
   let tweet = `
-    <div class="p-4 border-t border-slate-200">
+    <div id="${tweet_id}" class="p-4 border-t border-slate-200">
     <div class="flex">
       <img class="flex-none w-12 h-12 rounded-full" src="/images/1.jpg" alt="">
       <div class="w-full pl-4">
@@ -42,7 +42,8 @@ async function sendTweet(){
           ${_one("input", form).value}
         </div>
         <div class="flex gap-12 w-full mt-4 text-lg">
-            <i class="fa-solid fa-message ml-auto"></i>
+            <i onclick="delete_tweet('${tweet_id}')" class="fas fa-trash ml-auto"></i>
+            <i class="fa-solid fa-message"></i>
             <i class="fa-solid fa-heart"></i>
             <i class="fa-solid fa-retweet"></i>
             <i class="fa-solid fa-share-nodes"></i>
@@ -56,3 +57,13 @@ async function sendTweet(){
   _one("#tweets").insertAdjacentHTML("afterbegin", tweet)
 
 }
+
+
+function delete_tweet(){
+  
+}
+
+
+
+
+
