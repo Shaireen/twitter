@@ -60,9 +60,12 @@ async function sendTweet(){
 
 
 function delete_tweet(tweet_id){
-  _one(`#${tweet_id}`).remove()
+  // _one(`#${tweet_id}`).remove()
+  document.querySelector(`[id='${tweet_id}']`).remove()
 }
 
+// #a z
+// #12
 
 
 
