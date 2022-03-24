@@ -59,10 +59,17 @@ async function sendTweet(){
 }
 
 
-function delete_tweet(tweet_id){
-  document.querySelector(`[id='${tweet_id}']`).remove()
+async function delete_tweet(tweet_id){
   // Connect to the api and delete it from the "database"
+  const connection = await fetch(`/api-delete-tweet/${tweet_id}`, {
+    method : "DELETE"
+  })
+  if( ! connection.ok ){
+    alert("uppps... try again")
+    return
+  }
 
+  document.querySelector(`[id='${tweet_id}']`).remove()
 }
 
 
