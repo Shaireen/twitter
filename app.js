@@ -18,10 +18,12 @@ async function sendTweet(){
     method : "POST",
     body : new FormData(form)
   })
+
+  button.disabled = false
+  button.innerText = button.dataset.default
+  _one("input", form).value = ""  
+
   if( ! connection.ok ){
-    button.disabled = false
-    button.innerText = button.dataset.default
-    _one("input", form).value = ""
     return
   }
   // Success
@@ -37,7 +39,7 @@ async function sendTweet(){
           aaa bbb
         </p>            
         <div class="pt-2">
-          XXXXXXXXXXXX
+          ${_one("input", form).value}
         </div>
         <div class="flex gap-12 w-full mt-4 text-lg">
             <i class="fa-solid fa-message ml-auto"></i>
