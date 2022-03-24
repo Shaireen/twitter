@@ -80,10 +80,12 @@ def _():
 ##############################
 @delete("/api-delete-tweet/<tweet_id>")
 def _(tweet_id):
+  print(tweets)
   # Validate that the tweet_id is a valid UUID4
   for index, tweet in enumerate(tweets):
     if tweet_id == tweet["id"]:
       tweets.pop(index)
+      print(tweets)
       return "tweet deleted"
 
   response.status = 204
