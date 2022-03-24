@@ -28,20 +28,17 @@ async function sendTweet(){
   let tweet = `
     <div class="p-4 border-t border-slate-200">
     <div class="flex">
-      <img class="flex-none w-12 h-12 rounded-full" src="/images/{{tweet['src']}}" alt="">
+      <img class="flex-none w-12 h-12 rounded-full" src="/images/1.jpg" alt="">
       <div class="w-full pl-4">
         <p class="font-bold">
-          @{{tweet["user_name"]}}
+          @xxx
         </p>            
         <p class="font-thin">
-          {{tweet["user_first_name"]}} {{tweet["user_last_name"]}}
+          aaa bbb
         </p>            
         <div class="pt-2">
-          {{tweet["text"]}}
+          XXXXXXXXXXXX
         </div>
-        % if 'image' in tweet:
-        <img class="mt-2 w-full object-cover h-80" src="/images/{{tweet['image']}}">
-        % end
         <div class="flex gap-12 w-full mt-4 text-lg">
             <i class="fa-solid fa-message ml-auto"></i>
             <i class="fa-solid fa-heart"></i>
@@ -53,6 +50,6 @@ async function sendTweet(){
   </div> 
   `
 
-  _one("#tweets").insertAdjacentHTML("afterbegin", "x")
+  _one("#tweets").insertAdjacentHTML("afterbegin", tweet)
 
 }
