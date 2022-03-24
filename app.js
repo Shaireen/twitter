@@ -25,7 +25,7 @@ async function sendTweet(){
   if( ! connection.ok ){
     return
   }
-  const tweet_id = await connection.text() # tweet id will be here
+  const tweet_id = await connection.text() // tweet id will be here
   // Success
   let tweet = `
     <div id="${tweet_id}" class="p-4 border-t border-slate-200">
@@ -59,8 +59,8 @@ async function sendTweet(){
 }
 
 
-function delete_tweet(){
-  
+function delete_tweet(tweet_id){
+  _one(`#${tweet_id}`).remove()
 }
 
 
