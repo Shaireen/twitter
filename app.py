@@ -1,4 +1,4 @@
-from bottle import default_app, get, post, request, response, run, static_file, view
+from bottle import default_app, delete, get, post, request, response, run, static_file, view
 import uuid
 
 
@@ -78,6 +78,16 @@ def _():
   return dict(tabs=tabs, tweets=tweets, trends=trends, items=items)
 
 ##############################
+@delete("/api-delete-tweet/<tweet_id>")
+def _(tweet_id):
+  # Validate that the tweet_id is a valid UUID4
+  for index, tweet in enumerate(tweets):
+    if tweet_id == tweet["id"]:
+      tweets.pop(index)
+      return "tweet deleted"
+
+  response.status = 204
+  return "tweet not found"
 
 
 ##############################
