@@ -23,11 +23,11 @@
 
 
   % # main page
-  <div class="flex w-4/5 mx-auto">
+  <div class="flex w-full mx-auto xl:w-4/5">
 
     % # left
     <div class="w-1/4">
-      <div class="fixed h-screen w-1/5 px-8 flex flex-col py-6">
+      <div class="fixed h-screen w-1/5 px-1 lg:px-6 flex flex-col py-6">
         <div class="">
           <div class="">
             <i class="fa-brands fa-twitter fa-fw text-4xl text-blue1 pl-5"></i>
@@ -37,7 +37,7 @@
             <div class="mt-6">
               <a class="text-xl hover:bg-lighter rounded-full py-3 px-6" href="">
                 <i class="{{tab['icon']}}"></i>
-                <span class="ml-2">{{tab['title']}}</span>
+                <span class="ml-2 hidden md:inline">{{tab['title']}}</span>
               </a>
             </div>
             % end
@@ -46,8 +46,17 @@
             Tweet
           </button>
         </div>
-        <div class="mt-auto bg-slate-400">
-          x
+        <div class="mt-auto">
+          <div class="flex items-center gap-2 px-2 py-3 hover:bg-gray-200 cursor-pointer rounded-full">
+            <img class="w-12 h-12 rounded-full flex-none" src="/images/3.jpg">
+            <div class="flex-1 overflow-ellipsis">
+              <p>Santiago Donoso</p>
+              <p class="font-thin">@santiagodonoso</p>
+            </div>
+            <button class="py-2 px-4 bg-white rounded-full">
+              ...
+            </button>
+          </div>
         </div>        
       </div>
     </div>
@@ -67,11 +76,15 @@
       </div>
 
       <div class="px-4">
-        <form class="flex relative p-4 border border-blue1 rounded" onsubmit="return false">
-          <input class="w-full h-12 text-gray-800 rounded outline-none placeholder:text-gray-800" 
-          type="text" placeholder="What is in your mind ?">
-          <button
-          class="absolute bottom-2 right-2 px-8 py-2 bg-blue2 text-white rounded-full">
+        <form class="flex flex-col relative pb-14 border border-blue1 rounded" onsubmit="validate(sendTweet); return false" autocomplete="off">
+          <label for="txt-tweet" class="w-full font-thin text-sm text-gray-400 pt-2 pl-4">1 to 100 characters</label>
+          <input id="txt-tweet" class="w-full h-12 p-4 text-gray-800 rounded outline-none placeholder:text-gray-800" 
+          type="text" placeholder="What is in your mind ?"
+          data-validate="str" data-min="1" data-max="100">
+          <button type="submit" class="absolute bottom-2 right-2 px-8 py-2 bg-blue2 text-white rounded-full"
+            data-default="Tweet"
+            data-await="Tweeting..."
+          >
             Tweet
           </button>
         </form>
@@ -112,7 +125,7 @@
     
 
     % # right
-    <div class="w-1/4 h-screen">
+    <div class="w-1/4 h-screen hidden lg:block">
       <div class="w-1/5 fixed flex flex-col h-screen gap-4 py-4 pl-4">
         <div class="h-1/2 flex-grow bg-gray-300 rounded overflow-hidden">
           % for trend in trends:
@@ -127,7 +140,7 @@
           % end
         </div>
 
-        <div class="h-1/2 bg-gray-100 rounded">
+        <div class="relative h-1/2 bg-gray-100 rounded">
           <div class="px-2 pt-4 font-bold text-xl">
             You might like
           </div>
@@ -143,7 +156,7 @@
             </button>
           </div>
           % end
-          <a href="" class="self-end px-2 text-blue1 font-thin">
+          <a href="" class="absolute bottom-0 self-end px-2 text-blue1">
             Show more
           </a>
         </div>
@@ -155,6 +168,7 @@
   % # end page
   
   <script src="app.js"></script>
+  <script src="validator.js"></script>
 
 </body>
 </html>
