@@ -96,6 +96,7 @@ def _():
             "date":"Feb 20", 
             "text":tweet_text
             }
+  tweets.append(tweet)
   # Respond
   return tweet_id
 
