@@ -5,167 +5,73 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://kit.fontawesome.com/c884ab5724.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app.css">
-  <title>VOICES</title>
+  <title>Twitter</title>
 </head>
-<body class="w-full h-screen">
-
-
-  <section id="tweetModal" class="fixed w-screen h-screen z-10 hidden">
-    <div class="absolute h-full w-full bg-black bg-opacity-50" onclick="toggleTweetModal()">
-
+<body class="w-full h-screen bg-black text-white">
+  <main class="grid grid-cols-2">
+    <div class="bg-twitter-bg h-screen bg-cover">
+      <div class="m-auto">
+      <i class="fa-brands fa-twitter fa-fw text-100xl text-white p-80"></i>
     </div>
-    <div class="relative z-10 bg-black rounded-lg w-1/3 h-64 mx-auto mt-20">
-      
     </div>
-  </section>
-
-
-
-  % # main page
-  <div class="flex w-full mx-auto xl:w-4/5">
-
-    % # left
-    <div class="w-1/4">
-      <div class="fixed h-screen w-1/5 px-1 lg:px-6 flex flex-col py-6">
-        <div class="">
-          <div class="">
-            <i class="fa-brands fa-twitter fa-fw text-4xl text-blue1 pl-5"></i>
-          </div>
-          <div class="">
-            % for tab in tabs:
-            <div class="mt-6">
-              <a class="text-xl hover:bg-lighter rounded-full py-3 px-6" href="">
-                <i class="{{tab['icon']}}"></i>
-                <span class="ml-2 hidden md:inline">{{tab['title']}}</span>
-              </a>
-            </div>
-            % end
-          </div>
-          <button onclick="toggleTweetModal()" class="mt-8 w-full py-2 text-lg text-white bg-blue1 rounded-full">
-            Tweet
-          </button>
-        </div>
-        <div class="mt-auto">
-          <div class="flex items-center gap-2 px-2 py-3 hover:bg-gray-200 cursor-pointer rounded-full">
-            <img class="w-12 h-12 rounded-full flex-none" src="/images/3.jpg">
-            <div class="flex-1 overflow-ellipsis">
-              <p>Santiago Donoso</p>
-              <p class="font-thin">@santiagodonoso</p>
-            </div>
-            <button class="py-2 px-4 bg-white rounded-full">
-              ...
-            </button>
-          </div>
-        </div>        
-      </div>
-    </div>
-    % # end left
-
-
-
-    % # center
-    <div class="w-2/4 min-h-screen border-x border-gray-300">
-
-      <div class="p-4">
-        <form class="relative" onsubmit="return false">
-          <i class="fas fa-search absolute top-4 left-4"></i>
-          <input class="w-full h-12 px-4 rounded-full placeholder:text-gray-700 bg-gray-100 pl-12 outline-none" 
-          type="text" placeholder="What are you interested in ?">
-        </form>
-      </div>
-
-      <div class="px-4">
-        <form class="flex flex-col relative pb-14 border border-blue1 rounded" onsubmit="validate(sendTweet); return false" autocomplete="off">
-          <label for="txt-tweet" class="w-full font-thin text-sm text-gray-400 pt-2 pl-4">1 to 100 characters</label>
-          <input name="tweet_text" id="txt-tweet" class="w-full h-12 p-4 text-gray-800 rounded outline-none placeholder:text-gray-800" 
-          type="text" placeholder="What is in your mind ?"
-          data-validate="str" data-min="1" data-max="100">
-          <button type="submit" class="absolute bottom-2 right-2 px-8 py-2 bg-blue2 text-white rounded-full"
-            data-default="Tweet"
-            data-await="Tweeting..."
-          >
-            Tweet
-          </button>
-        </form>
-      </div>
-
-      <div id="tweets" class="voices mt-4">
-        % for tweet in tweets:
-        <div class="p-4 border-t border-slate-200">
-          <div class="flex">
-            <img class="flex-none w-12 h-12 rounded-full" src="/images/{{tweet['src']}}" alt="">
-            <div class="w-full pl-4">
-              <p class="font-bold">
-                @{{tweet["user_name"]}}
-              </p>            
-              <p class="font-thin">
-                {{tweet["user_first_name"]}} {{tweet["user_last_name"]}}
-              </p>            
-              <div class="pt-2">
-                {{tweet["text"]}}
-              </div>
-              % if 'image' in tweet:
-              <img class="mt-2 w-full object-cover h-80" src="/images/{{tweet['image']}}">
-              % end
-              <div class="flex gap-12 w-full mt-4 text-lg">
-                  <i class="fa-solid fa-message ml-auto"></i>
-                  <i class="fa-solid fa-heart"></i>
-                  <i class="fa-solid fa-retweet"></i>
-                  <i class="fa-solid fa-share-nodes"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        % end           
-      </div>
-    </div>
-    % # end center  
-    
-    
-
-    % # right
-    <div class="w-1/4 h-screen hidden lg:block">
-      <div class="w-1/5 fixed flex flex-col h-screen gap-4 py-4 pl-4">
-        <div class="h-1/2 flex-grow bg-gray-300 rounded overflow-hidden">
-          % for trend in trends:
-            <div class="flex justify-between px-2 py-1 hover:bg-gray-400 cursor-pointer">
-              <div>
-                <p class="font-thin">{{trend["category"]}}</p>
-                <p class="font-bold">{{trend["title"]}}</p>
-                <p class="font-thin">{{trend["tweets_counter"]}} tweets</p>
-              </div>
-              <div>...</div>
-            </div>
-          % end
-        </div>
-
-        <div class="relative h-1/2 bg-gray-100 rounded">
-          <div class="px-2 pt-4 font-bold text-xl">
-            You might like
-          </div>
-          % for item in items:
-          <div class="flex items-center gap-2 px-2 py-3 hover:bg-gray-200 cursor-pointer">
-            <img class="w-12 h-12 rounded-full flex-none" src="/images/{{item['img']}}">
-            <div class="flex-1 overflow-ellipsis">
-              <p>{{item["title"]}}</p>
-              <p class="font-thin">@{{item["user_name"]}}</p>
-            </div>
-            <button class="py-2 px-4 bg-white rounded-full">
-              Follow
-            </button>
-          </div>
-          % end
-          <a href="" class="absolute bottom-0 self-end px-2 text-blue1">
-            Show more
-          </a>
-        </div>
-      </div>
-    </div>
-    % # end right     
-
+      <div class="ml-8 my-auto">
+        <div>
+          <i class="fa-brands fa-twitter fa-fw text-4xl text-white py-5"></i>
+    <h1 class="font-main-heading text-6xl">Welcome to Twitter</h1>
   </div>
-  % # end page
+    <form action="/signup" method="post" enctype="multipart/form-data">
+      <div class="mb-5">
+        <label for="user_name" class="text-sm text-lightgrey">Username (min. 3, max 50 characters):</label>
+        <input name="user_name" id="user_name" type="text" placeholder="Username"  class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_name":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+        <label for="user_firstname" class="text-sm text-lightgrey mt-4">Name (min. 3, max 50 characters):</label>
+        <input name="user_firstname" id="user_firstname" type="text" placeholder="First name" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_firstname":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+        <label for="user_lastname" class="text-sm text-lightgrey">Last name (min. 3, max 50 characters):</label>
+        <input name="user_lastname" id="user_lastname" type="text" placeholder="Last name" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_lastname":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+    
+        <label for="user_email" class="text-sm text-lightgrey">Email:</label>
+        <input name="user_email" type="text" placeholder="Email" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_email":
+        <p class="error text-red-600 text-sm">Please enter a valid email</p>
+        % end 
+    </div>
+    <div class="mb-5">
+        
+        <label for="user_password" class="text-sm text-lightgrey">Password (min. 6, max. 50 characters)</label>
+        <input name="user_password" id="user_password" type="password" placeholder="Password" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_password":
+            <p class="error text-red-600 text-sm">Please enter a valid password</p>
+        % end 
+    </div>
+        <label for="my_image" class="text-sm text-lightgrey">Profile picture:</label>
+        <input type="file" name="my_image" class="block bg-transparent mb-5"/>
+        % if error == "profile_pic":
+            <p class="error text-red-600 text-sm">Please upload a picture</p>
+        % end 
+    <button class="block w-72 h-10 bg-blue1 rounded-full">Signup</button>
+    </form>
+</div>
+
+</main>
+
   
   <script src="app.js"></script>
   <script src="validator.js"></script>

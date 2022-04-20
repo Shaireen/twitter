@@ -12,6 +12,18 @@ module.exports = {
         "light": "#AAB8C2",
         "lighter": "#E1E8ED",
         "lightest": "#F5F8FA",
+        "lightgrey": "#71767b",
+        "mediumgrey": "#202327",
+        "darkgrey": "#16181c"
+      },
+      backgroundImage: {
+        "twitter-bg": "url('/images/twitter_bg.png')"
+      },
+      fontFamily: {
+        "main-heading": ["Work Sans", "sans-serif"]
+      },
+      fontSize: {
+        "100xl": "30rem"
       }         
     },
   },
