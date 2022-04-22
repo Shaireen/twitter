@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/c884ab5724.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app.css">
+  <title>Twitter</title>
+</head>
+<body class="w-full h-screen bg-black text-white">
+  <main class="grid grid-cols-2">
+    <div class="bg-twitter-bg h-screen bg-cover">
+      <div class="m-auto">
+      <i class="fa-brands fa-twitter fa-fw text-100xl text-white p-80"></i>
+    </div>
+    </div>
+      <div class="ml-8 my-auto">
+        <div>
+          <i class="fa-brands fa-twitter fa-fw text-4xl text-white py-5"></i>
+    <h1 class="font-main-heading text-6xl">Welcome to Twitter</h1>
+  </div>
+    <form action="/signup" method="post" enctype="multipart/form-data">
+      <div class="mb-5">
+        <label for="user_name" class="text-sm text-lightgrey">Username (min. 3, max 50 characters):</label>
+        <input name="user_name" id="user_name" type="text" placeholder="Username"  class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_name":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+        <label for="user_firstname" class="text-sm text-lightgrey mt-4">Name (min. 3, max 50 characters):</label>
+        <input name="user_firstname" id="user_firstname" type="text" placeholder="First name" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_firstname":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+        <label for="user_lastname" class="text-sm text-lightgrey">Last name (min. 3, max 50 characters):</label>
+        <input name="user_lastname" id="user_lastname" type="text" placeholder="Last name" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_lastname":
+            <p class="error text-red-600 text-sm">Please enter a valid name</p>
+        % end 
+      </div>
+    <div class="mb-5">
+    
+        <label for="user_email" class="text-sm text-lightgrey">Email:</label>
+        <input name="user_email" type="text" placeholder="Email" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_email":
+        <p class="error text-red-600 text-sm">Please enter a valid email</p>
+        % end 
+    </div>
+    <div class="mb-5">
+        
+        <label for="user_password" class="text-sm text-lightgrey">Password (min. 6, max. 50 characters)</label>
+        <input name="user_password" id="user_password" type="password" placeholder="Password" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+        % if error == "user_password":
+            <p class="error text-red-600 text-sm">Please enter a valid password</p>
+        % end 
+    </div>
+        <label for="my_image" class="text-sm text-lightgrey">Profile picture:</label>
+        <input type="file" name="my_image" class="block bg-transparent mb-5"/>
+        % if error == "profile_pic":
+            <p class="error text-red-600 text-sm">Please upload a picture</p>
+        % end 
+    <button class="block w-72 h-10 bg-blue1 rounded-full">Signup</button>
+    </form>
+</div>
+
+</main>
+
+  
+  <script src="app.js"></script>
+  <script src="validator.js"></script>
+
+</body>
+</html>

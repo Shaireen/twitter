@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c884ab5724.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/app.css">
+    <title>Log in to twitter</title>
+</head>
+<body class="w-full h-screen bg-black text-white">
+    <main class="grid grid-cols-2">
+        <div class="bg-twitter-bg h-screen bg-cover">
+            <div class="m-auto">
+            <i class="fa-brands fa-twitter fa-fw text-100xl text-white p-80"></i>
+          </div>
+          </div>
+          <div class="ml-8 my-auto">
+        <h1 class="font-main-heading text-6xl">Login</h1>
+    
+        <form action="/login" method="POST">
+    
+                <label for="email" class="text-sm text-lightgrey">Email:</label>
+                <input name="user_email" id="email" type="text" placeholder="Email" class="block w-72 h-10 px-2 rounded border-2 border-mediumgrey bg-transparent">
+                % if error == "user_email":
+                <p class="error text-red-600 text-sm">Please enter a valid email</p>
+                % end 
+    
+                <label for="password" class="text-sm text-lightgrey mt-5">Password:</label>
+                <input name="user_password" id="password" type="password" placeholder="Password" class="block w-72 h-10 px-2 rounded border-2 mb-5 border-mediumgrey bg-transparent">
+                % if error == "user_password":
+                <p class="error text-red-600 text-sm">Please enter a valid password</p>
+                % end 
+            
+                <button class="block w-72 h-10 bg-blue1 rounded-full">Login</button>
+    
+        </form>
+    </div>
+    </main>
+</body>
+</html>
