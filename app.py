@@ -17,8 +17,8 @@ import followuser_post
 import unfollowuser_delete
 import showuserprofile_get
 import usertweets_get
-
-##############################
+import tweet_post
+import tweet_delete
 
 
 ##############################
@@ -48,64 +48,26 @@ def _():
     error = request.params.get("error")
     return dict(error=error)
 
+##############################
+
 @get("/login")
 @view("login")
 def _():
-    return 
+  error = request.params.get("error")
+  user_email = request.params.get("user_email")
+  return dict(error=error, user_email = user_email)
+
+##############################
 
 @get("/signup")
 @view("index")
 def _():
   error = request.params.get("error")
-  return dict(error=error)
-
-@get("/userpage")
-@view("userpage")
-def _():
-    return dict(tabs=g.TABS, tweets=g.TWEETS, trends=g.TRENDS, items=g.ITEMS)
-##############################
-@delete("/api-delete-tweet/<tweet_id>")
-def _(tweet_id):
-  print(g.TWEETS)
-  # Validate that the tweet_id is a valid UUID4
-  for index, tweet in enumerate(g.TWEETS):
-    if tweet_id == tweet["id"]:
-      g.TWEETS.pop(index)
-      print(g.TWEETS)
-      return "tweet deleted"
-
-  response.status = 204
-  return "tweet not found"
-
-
-##############################
-@post("/api-create-tweet")
-def _():
-  # Validate
-  user_session_id = request.get_cookie("user_session_id")
-  user = g.SESSIONS[user_session_id]
-  decoded_user = jwt.decode(user, "yes super key", algorithms=["HS256"]) 
-  user_id = decoded_user["id"]
-  print(user_id)
-  tweet_text = request.forms.get("tweet_text", "")
-  if len(tweet_text) < 1 or len(tweet_text) > 100:
-    response.status = 400
-    return "tweet_text invalid" 
-  # Connect to the db
-  # Query
-  tweet_id = str(uuid.uuid4())
-  tweet = { "id":tweet_id, 
-            "user_id": user_id,
-            "src":"6.jpg", 
-            "user_first_name":"xxx", 
-            "user_last_name":"yyy", 
-            "user_name":"xxxyyy", 
-            "date":"Feb 20", 
-            "text":tweet_text
-            }
-  g.TWEETS.append(tweet) 
-  # Respond
-  return tweet_id
+  user_email = request.params.get("user_email")
+  user_name = request.params.get("user_name")
+  user_firstname = request.params.get("user_firstname")
+  user_lastname = request.params.get("user_lastname")
+  return dict(error=error, user_email = user_email, user_name = user_name, user_firstname = user_firstname, user_lastname = user_lastname)
 
 
 ##############################

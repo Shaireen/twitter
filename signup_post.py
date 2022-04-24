@@ -14,6 +14,15 @@ from email.mime.multipart import MIMEMultipart
 def _():
     user_id = str(uuid.uuid4())
 
+    if (request.forms.get("user_email")):
+        user_email = request.forms.get("user_email")
+    if (request.forms.get("user_name")):
+        user_name = request.forms.get("user_name")
+    if (request.forms.get("user_firstname")):
+        user_firstname = request.forms.get("user_firstname")
+    if (request.forms.get("user_lastname")):
+        user_lastname = request.forms.get("user_lastname")
+
     
 
     if not request.forms.get("user_email"):
@@ -27,50 +36,50 @@ def _():
 
     if not request.forms.get("user_password"):
         response.status = 400
-        return redirect(f"/signup?error=user_password&user_email={user_email}")
+        return redirect(f"/signup?error=user_password&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_password")) < 6:
         response.status = 400
-        return redirect(f"/signup?error=user_password&user_email={user_email}")
+        return redirect(f"/signup?error=user_password&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_password")) > 50:
         response.status = 400
-        return redirect(f"/signup?error=user_password&user_email={user_email}")
+        return redirect(f"/signup?error=user_password&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
 
     user_password = request.forms.get("user_password")
 
     if not request.forms.get("user_name"):
         response.status = 400
-        return redirect(f"/signup?error=user_name&user_email={user_email}")
+        return redirect(f"/signup?error=user_name&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_name")) < 3:
         response.status = 400
-        return redirect(f"/signup?error=user_name&user_email={user_email}")
+        return redirect(f"/signup?error=user_name&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_name")) > 50:
         response.status = 400
-        return redirect(f"/signup?error=user_name&user_email={user_email}")
+        return redirect(f"/signup?error=user_name&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
 
     user_name = request.forms.get("user_name")
 
 
     if not request.forms.get("user_firstname"):
         response.status = 400
-        return redirect(f"/signup?error=user_firstname&user_email={user_email}")
+        return redirect(f"/signup?error=user_firstname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_firstname")) < 3:
         response.status = 400
-        return redirect(f"/signup?error=user_firstname&user_email={user_email}")
+        return redirect(f"/signup?error=user_firstname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_firstname")) > 50:
         response.status = 400
-        return redirect(f"/signup?error=user_firstname&user_email={user_email}")
+        return redirect(f"/signup?error=user_firstname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     
     user_firstname = request.forms.get("user_firstname")
 
     if not request.forms.get("user_lastname"):
         response.status = 400
-        return redirect(f"/signup?error=user_lastname&user_email={user_email}")
+        return redirect(f"/signup?error=user_lastname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_lastname")) < 3:
         response.status = 400
-        return redirect(f"/signup?error=user_lastname&user_email={user_email}")
+        return redirect(f"/signup?error=user_lastname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
     if len(request.forms.get("user_lastname")) > 50:
         response.status = 400
-        return redirect(f"/signup?error=user_lastname&user_email={user_email}")
+        return redirect(f"/signup?error=user_lastname&user_email={user_email}&user_name={user_name}&user_firstname={user_firstname}&user_lastname={user_lastname}")
 
     user_lastname = request.forms.get("user_lastname")
 
@@ -91,7 +100,7 @@ def _():
         return "image not allowed"
     
     # overwrite jpg to jpeg so imghdr will pass validation
-    if file_extension == ".jpg": file_extension = ".jpeg"
+    file_extension = ".jpeg"
 
     image_id = str(uuid.uuid4())
     # Create new image name
@@ -105,7 +114,7 @@ def _():
     print("imghdr.what", imghdr.what(f"images/{image_name}"))   # imghdr.what png
     print("file_extension", file_extension)                     # file_extension .png
     imghdr_extension = imghdr.what(f"images/{image_name}")
-    if file_extension != f".{imghdr_extension}":
+    if imghdr_extension not in ("png", "jpeg", "jpg"):
         response.status = 400
         print("mmm... suspicious ... it is not really an image")
         # remove the invalid image from the folder

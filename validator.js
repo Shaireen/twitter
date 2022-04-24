@@ -7,7 +7,6 @@ function validate(callback){
   const validate_error = "rgba(240, 130, 240, 0.2)"
   _all("[data-validate]",form).forEach(function(element){ 
     element.classList.remove("validate_error")
-    element.style.backgroundColor = "white"
   })
   _all("[data-validate]",form).forEach( function(element){
     switch(element.getAttribute("data-validate")){

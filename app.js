@@ -1,13 +1,9 @@
 function _all(q, e=document){return e.querySelectorAll(q)}
 function _one(q, e=document){return e.querySelector(q)}
 
-
+// store the id of tweet that is meant to be updated
 let current_update_tweet_id;
-
-
-function toggleTweetModal(){
-  _one("#tweetModal").classList.toggle("hidden")
-}
+let user_data;
 
 async function sendTweet(){
   const form = event.target
@@ -15,7 +11,7 @@ async function sendTweet(){
   const button = _one("button[type='submit']", form)
   console.log(button)
   button.innerText = button.dataset.await
-  // button.innerText = button.getAttribute("data-await")
+
   button.disabled = true
   const connection = await fetch("/api-create-tweet", {
     method : "POST",
@@ -27,10 +23,11 @@ async function sendTweet(){
  const tweet_id = tweet_info;
 
 
-
+ // get info about the user to display it in the tweet - names, username, profile picture
   getInfo('/user-info', 'GET', true)
   .then(data => {
     console.log(data) // JSON data parsed by `data.json()` call
+    user_data = data;
     addTweet(data);
   });
 
@@ -39,6 +36,7 @@ async function sendTweet(){
   button.innerText = button.dataset.default
 
   if( ! connection.ok ){
+    console.log("connection issue")
     return
   }
 
@@ -78,7 +76,7 @@ function addTweet(data) {
 
 }
 
-
+// deleting the tweet
 async function delete_tweet(tweet_id, isAdmin){
   console.log(tweet_id)
   // Connect to the api and delete it from the "database"
@@ -86,7 +84,7 @@ async function delete_tweet(tweet_id, isAdmin){
     method : "DELETE"
   })
   if( ! connection.ok ){
-    alert("uppps... try again")
+    alert("there has been a connection issue. Try again")
     return
   }
 
@@ -98,11 +96,13 @@ if (isAdmin) {
 }
 }
 
+// get id of the tweet for an update
 function getTweetId(event) {
   const tweet_id = event.target.id.slice(4);
   getInfo('/tweets', 'GET', true)
   .then(data => {
-    getCurrentTweetInfo(data, tweet_id) // JSON data parsed by `data.json()` call
+    // call function that gets the current tweet text
+    getCurrentTweetInfo(data, tweet_id) 
   });
 _one("#tweetEditModal").classList.toggle("hidden");
 }
@@ -110,16 +110,15 @@ _one("#tweetEditModal").classList.toggle("hidden");
 
 
 
-// Example POST method implementation:
+// reusable fetch 
 async function getInfo(url, method, isjson) {
-  // Default options are marked with *
   const response = await fetch(url, {
-    method: method, // *GET, POST, PUT, DELETE, etc.
+    method: method, 
   });
   console.log(response)
   if (response.status == 200) {
   if  (isjson) {
-  return response.json(); // parses JSON response into native JavaScript objects
+  return response.json(); 
   } else {
     return response;
   }
@@ -128,23 +127,23 @@ async function getInfo(url, method, isjson) {
 }
 }
 
-
+// function related to updating the tweet 
 function getCurrentTweetInfo(data, id) {
-  data.tweets.map(findTweetText)
+  //data.tweets.map(findTweetText)
   console.log(id)
+  // set global variable to id of the tweet being currently updated
   current_update_tweet_id = id;
 
-
+// get tweet index
   const tweet_index = data.tweets.findIndex(tweet => tweet.id === id)
 
-  function findTweetText(tweet) {
-    console.log(tweet.id)
-  }
+// get the current text of the tweet
   _one("#tweet_edit_text").value = data.tweets[tweet_index].text;
 
   
 }
 
+// update the tweet - put route
 function updateTweet() {
   const new_tweet_text = _one("#tweet_edit_text").value;
 
@@ -157,10 +156,11 @@ function updateTweet() {
   });
 }
 
-
+// manage the followed users
 function addFollowing(event) {
   const following_id = event.target.id;
   console.log(event.target.innerText)
+  // if we want to follow the user - following route
   if (event.target.innerText == "Follow") {
   getInfo(`/follow-user/${following_id}`, 'POST', false)
   .then(data => {
@@ -168,6 +168,7 @@ function addFollowing(event) {
     console.log("hi")
     event.target.innerText = "Following";
 }); } else {
+  // if we want to unfollow - unfollow route
   getInfo(`/unfollow-user/${following_id}`, 'DELETE', false)
   .then(data => {
     console.log(data)
@@ -176,6 +177,8 @@ function addFollowing(event) {
 }
 }
 
+
+// display the user profile from right aside 
 function getUserProfile(event) {
   const user_id = event.target.id.slice(4);
 
@@ -194,6 +197,7 @@ getInfo(`/user-tweets/${user_id}`, 'GET',  true)
 }
 
 
+// html for the user profile - inserting and removing it in order to avoid having to open a new page/refresh
 function showUserProfile(user) {
 let userProfile = `
 
@@ -223,32 +227,51 @@ _one("#user-profile").innerHTML = "";
 _one("#user-profile").insertAdjacentHTML("afterbegin", userProfile)
 }
 
-function showUserTweets(tweets, hideInput) {
-  _one("#tweets").innerHTML = "";
+// get tweets for the user profile
+function showUserTweets(tweets, hideInput, isAdmin) {
+  
+    _one("#tweets").innerHTML = "";
+
 
   if (hideInput) {_one("#add-tweet").classList.add("hidden")};
   tweets.forEach((tweet) => {
     console.log(tweet)
-    let oneTweet = `<div class="p-4 border-t border-mediumgrey">
+    let tweet_image = '';
+    let edit_options = '';
+    if (tweet.image) {
+      tweet_image =  `<img class="mt-2 w-full object-cover h-80" src="/images/${tweet.image}">`
+    }
+
+    if ( user_data && (tweet.user_id) == user_data.user_info.id || isAdmin) {
+      edit_options = `<i onclick="delete_tweet('${tweet.id}', false)" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
+        event)"></i>`
+    }
+
+
+
+
+    let oneTweet = `<div class="p-4 border-t border-mediumgrey"  id="${tweet.id}">
     <div class="flex">
-      <img class="flex-none w-12 h-12 rounded-full object-cover" src="/images/${tweet.user_id}.jpg" alt="">
+    <img class="flex-none w-12 h-12 rounded-full object-cover" src="/images/${tweet.user_id}.jpeg" alt="">
       <div class="w-full pl-4">
         <p class="font-bold">
-          ${tweet.user_first_name} ${tweet.user_last_name}
+          ${tweet.user_firstname} ${tweet.user_lastname}
         </p>            
         <p class="font-thin">
-          ${tweet.user_name}
+          @${tweet.user_name}
         </p>            
-        <div class="pt-2">
+        <div class="pt-2 tweet-text">
           ${tweet.text}
-        </div>
-        <div class="flex gap-12 w-full mt-4 text-lg">
+        </div>` + tweet_image + 
+
+        `<div class="flex gap-12 w-full mt-4 text-lg">
+          
             <i class="fa-solid fa-message ml-auto"></i>
             <i class="fa-solid fa-heart"></i>
             <i class="fa-solid fa-retweet"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-            <i class="fa-solid fa-pen-to-square"></i>
-        </div>
+            <i class="fa-solid fa-share-nodes"></i>` + edit_options + 
+           
+        `</div>
       </div>
     </div>
   </div>`
@@ -257,18 +280,31 @@ function showUserTweets(tweets, hideInput) {
 
 } 
 
+// admin panel function - switch from user to admin and back
 function switchMode(event) {
+  let isAdmin;
 if (event.target.innerText == "Admin") {
-  event.target.innerText = "User";
-  _one("#admin").classList.remove("hidden");
-  _one("#tweets").classList.add("hidden");
+  event.target.innerText = "User"
+  isAdmin = true;
+  getInfo(`/tweets`, 'GET',  true) 
+  .then(tweets => {
+    showUserTweets(tweets.tweets, false, isAdmin)
+    _one("#add-tweet").classList.remove("hidden")
+  });
+
 } else {
   event.target.innerText = "Admin";
-  _one("#admin").classList.add("hidden");
-  _one("#tweets").classList.remove("hidden");
+  isAdmin = false;
+  getInfo(`/tweets`, 'GET',  true) 
+.then(tweets => {
+  showUserTweets(tweets.tweets, false, isAdmin)
+});
+ 
 }
 }
 
+
+// fetch all tweets and call search function
 function getTweets() {
 console.log()
 
@@ -281,6 +317,7 @@ getInfo(`/tweets`, 'GET',  true)
 });
 }
 
+// search function for tweet text
 function searchTweets(tweets, searchResults) { 
   const searchQuery = _one("#search").value.toLowerCase();
   
@@ -296,6 +333,7 @@ function searchTweets(tweets, searchResults) {
       showUserTweets(searchResults, false) }
   }
 
+  // go back to home page when clicking on back arrow in user profile
   function hideProfile() {
     _one("#user-profile").innerHTML = "";
     getInfo(`/tweets`, 'GET',  true) 
@@ -303,4 +341,74 @@ function searchTweets(tweets, searchResults) {
   showUserTweets(tweets.tweets, false)
   _one("#add-tweet").classList.remove("hidden")
 });
+  }
+
+
+  function fetchMyInfo(){
+
+    getInfo('/user-info', 'GET', true)
+    .then(data => {
+      console.log(data) // JSON data parsed by `data.json()` call
+      user_data = data;
+      fetchMyTweets()
+    });
+
+  }
+
+
+  function fetchMyTweets(){
+    console.log(user_data)
+    getInfo(`/tweets`, 'GET',  true) 
+.then(tweets => {
+  console.log(tweets)
+  showMyTweets(tweets.tweets);
+});
+  }
+
+
+  function showMyTweets(tweets) {
+    _one("#tweets").innerHTML = "";
+  let oneTweet;
+
+
+    tweets.forEach((tweet) => {
+
+      if ( user_data && (tweet.user_id) == user_data.user_info.id) {
+      
+    oneTweet = `<div class="p-4 border-t border-mediumgrey"  id="${tweet.id}">
+      <div class="flex">
+      <img class="flex-none w-12 h-12 rounded-full object-cover" src="/images/${tweet.user_id}.jpeg" alt="">
+        <div class="w-full pl-4">
+          <p class="font-bold">
+            ${tweet.user_firstname} ${tweet.user_lastname}
+          </p>            
+          <p class="font-thin">
+            @${tweet.user_name}
+          </p>            
+          <div class="pt-2 tweet-text">
+            ${tweet.text}
+          </div><div class="flex gap-12 w-full mt-4 text-lg">
+            
+              <i class="fa-solid fa-message ml-auto"></i>
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-retweet"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+              <i onclick="delete_tweet('${tweet.id}', false)" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
+                event)"></i>
+             
+          </div>
+        </div>
+      </div>
+    </div>` }
+
+    if (oneTweet) {
+    _one("#tweets").insertAdjacentHTML("afterbegin", oneTweet)
+    if (!_one("#no-tweets-info").classList.contains("hidden")) {
+      _one("#no-tweets-info").classList.add("hidden");
+    }
+    } else if (_one("#no-tweets-info").classList.contains("hidden")) {
+      _one("#no-tweets-info").classList.remove("hidden");
+    }
+  })
+
   }
