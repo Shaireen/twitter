@@ -1,6 +1,15 @@
 function _all(q, e=document){return e.querySelectorAll(q)}
 function _one(q, e=document){return e.querySelector(q)}
 
+
+
+function toggleTweetEditModal(){
+  _one("#tweetEditModal").classList.toggle("hidden")
+}
+
+function toggleTweetModal(){
+  _one("#tweetModal").classList.toggle("hidden")
+}
 // store the id of tweet that is meant to be updated
 let current_update_tweet_id;
 let user_data;
@@ -42,6 +51,23 @@ async function sendTweet(){
 
 
 function addTweet(data) {
+console.log(_one("#tweet_image").value)
+ let tweet_image = '';
+  if (_one("#tweet_image").value) {
+    full_image_src = _one("#tweet_image").value.substr(12)
+    last_dot_index = full_image_src.lastIndexOf('.');
+    console.log(last_dot_index)
+    image_name = full_image_src.slice(0, last_dot_index);
+    tweet_image =  `<img class="mt-2 w-full object-cover h-80" src="/images/${image_name}.jpeg">`
+  }
+
+  if (_one("#tweet_image2").value) {
+    full_image_src = _one("#tweet_image2").value.substr(12)
+    last_dot_index = full_image_src.lastIndexOf('.');
+    console.log(last_dot_index)
+    image_name = full_image_src.slice(0, last_dot_index);
+    tweet_image =  `<img class="mt-2 w-full object-cover h-80" src="/images/${image_name}.jpeg">`
+  }
   let tweet = `
     <div id="${tweet_id}" class="p-4 border-t border-slate-200">
     <div class="flex">
@@ -55,9 +81,9 @@ function addTweet(data) {
         </p>            
         <div class="pt-2 tweet-text">
           ${_one("input", form).value}
-        </div>
-        <div class="flex gap-12 w-full mt-4 text-lg">
-            <i onclick="delete_tweet('${tweet_id}', false)" class="fas fa-trash ml-auto"></i>
+        </div>` + tweet_image +
+        `<div class="flex gap-12 w-full mt-4 text-lg">
+            <i onclick="delete_tweet('${tweet_id}')" class="fas fa-trash ml-auto"></i>
             <i class="fa-solid fa-message"></i>
             <i class="fa-solid fa-heart"></i>
             <i class="fa-solid fa-retweet"></i>
@@ -71,13 +97,21 @@ function addTweet(data) {
   `
   _one("input", form).value = ""  
 
+  if (!_one("#no-tweets-info").classList.contains("hidden")) {
+    _one("#no-tweets-info").classList.add("hidden");
+  }
+
+  if (!_one("#tweetModal").classList.contains("hidden")) {
+    _one("#tweetModal").classList.add("hidden")
+  }
+
   _one("#tweets").insertAdjacentHTML("afterbegin", tweet)
 };
 
 }
 
 // deleting the tweet
-async function delete_tweet(tweet_id, isAdmin){
+async function delete_tweet(tweet_id){
   console.log(tweet_id)
   // Connect to the api and delete it from the "database"
   const connection = await fetch(`/api-delete-tweet/${tweet_id}`, {
@@ -87,13 +121,7 @@ async function delete_tweet(tweet_id, isAdmin){
     alert("there has been a connection issue. Try again")
     return
   }
-
-  console.log(isAdmin)
-if (isAdmin) {
-  document.querySelector(`#admin-${tweet_id}`).remove()
-} else {
-  document.querySelector(`[id='${tweet_id}']`).remove()
-}
+  document.querySelector(`[id='${tweet_id}']`).remove();
 }
 
 // get id of the tweet for an update
@@ -243,7 +271,7 @@ function showUserTweets(tweets, hideInput, isAdmin) {
     }
 
     if ( user_data && (tweet.user_id) == user_data.user_info.id || isAdmin) {
-      edit_options = `<i onclick="delete_tweet('${tweet.id}', false)" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
+      edit_options = `<i onclick="delete_tweet('${tweet.id}')" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
         event)"></i>`
     }
 
@@ -339,11 +367,14 @@ function searchTweets(tweets, searchResults) {
     getInfo(`/tweets`, 'GET',  true) 
 .then(tweets => {
   showUserTweets(tweets.tweets, false)
+  if (!_one("#no-tweets-info").classList.contains("hidden")) {
+    _one("#no-tweets-info").classList.add("hidden");
+  }
   _one("#add-tweet").classList.remove("hidden")
 });
   }
 
-
+//fetch the user info to display only user's tweets
   function fetchMyInfo(){
 
     getInfo('/user-info', 'GET', true)
@@ -355,7 +386,7 @@ function searchTweets(tweets, searchResults) {
 
   }
 
-
+// fetch all tweets
   function fetchMyTweets(){
     console.log(user_data)
     getInfo(`/tweets`, 'GET',  true) 
@@ -365,15 +396,21 @@ function searchTweets(tweets, searchResults) {
 });
   }
 
-
+// show user's tweets
   function showMyTweets(tweets) {
+    _one("#user-profile").innerHTML = "";
     _one("#tweets").innerHTML = "";
   let oneTweet;
+  let tweet_image ='';
 
 
     tweets.forEach((tweet) => {
-
+      // if the user id in tweet matches the id of the user who is logged in - display the tweet
       if ( user_data && (tweet.user_id) == user_data.user_info.id) {
+console.log(tweet.image)
+        if (tweet.image) {
+          tweet_image =  `<img class="mt-2 w-full object-cover h-80" src="/images/${tweet.image}">`
+        }
       
     oneTweet = `<div class="p-4 border-t border-mediumgrey"  id="${tweet.id}">
       <div class="flex">
@@ -387,13 +424,14 @@ function searchTweets(tweets, searchResults) {
           </p>            
           <div class="pt-2 tweet-text">
             ${tweet.text}
-          </div><div class="flex gap-12 w-full mt-4 text-lg">
+          </div>` + tweet_image + 
+          `<div class="flex gap-12 w-full mt-4 text-lg">
             
               <i class="fa-solid fa-message ml-auto"></i>
               <i class="fa-solid fa-heart"></i>
               <i class="fa-solid fa-retweet"></i>
               <i class="fa-solid fa-share-nodes"></i>
-              <i onclick="delete_tweet('${tweet.id}', false)" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
+              <i onclick="delete_tweet('${tweet.id}')" class="fas fa-trash"></i> <i id="edit${tweet.id}" class="fa-solid fa-pen-to-square" onclick="getTweetId(
                 event)"></i>
              
           </div>
@@ -402,11 +440,13 @@ function searchTweets(tweets, searchResults) {
     </div>` }
 
     if (oneTweet) {
+      //hide info about no tweets
     _one("#tweets").insertAdjacentHTML("afterbegin", oneTweet)
     if (!_one("#no-tweets-info").classList.contains("hidden")) {
       _one("#no-tweets-info").classList.add("hidden");
     }
     } else if (_one("#no-tweets-info").classList.contains("hidden")) {
+      //display info about no tweets
       _one("#no-tweets-info").classList.remove("hidden");
     }
   })
