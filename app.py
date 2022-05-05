@@ -7,8 +7,10 @@ import jwt
 
 import g
 import signup_post
+import signup_get
 import home_get
 import login_post
+import login_get
 import logout_get
 import tweets_get
 import userinfo_get
@@ -48,27 +50,6 @@ def _():
     error = request.params.get("error")
     return dict(error=error)
 
-##############################
-
-@get("/login")
-@view("login")
-def _():
-  error = request.params.get("error")
-  user_email = request.params.get("user_email")
-  return dict(error=error, user_email = user_email)
-
-##############################
-
-@get("/signup")
-@view("index")
-def _():
-  error = request.params.get("error")
-  user_email = request.params.get("user_email")
-  user_name = request.params.get("user_name")
-  user_firstname = request.params.get("user_firstname")
-  user_lastname = request.params.get("user_lastname")
-  return dict(error=error, user_email = user_email, user_name = user_name, user_firstname = user_firstname, user_lastname = user_lastname)
-
 
 ##############################
 try:
@@ -77,3 +58,5 @@ try:
 except Exception as ex:
   print("Server running on development")
   run(host="127.0.0.1", port=3000, debug=True, reloader=True, server="paste")
+
+
